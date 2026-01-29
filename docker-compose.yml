@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  # The "Patient" - Simulates a business microservice
+  victim-api:
+    build:
+      context: ./services/victim-api
+    container_name: production-victim
+    ports:
+      - "8000:8000"
+    networks:
+      - internal-mesh
+
+  # The "Doctor" - The Agentic AI
+  agent-sentinel:
+    build:
+      context: ./services/agent-sentinel
+    container_name: ops-agent
+    depends_on:
+      - victim-api
+    # CRITICAL: This allows the container to control the host docker daemon
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - ./services/agent-sentinel/.env
+    environment:
+      - TARGET_CONTAINER=production-victim
+    networks:
+      - internal-mesh
+
+networks:
+  internal-mesh:
+    driver: bridge
