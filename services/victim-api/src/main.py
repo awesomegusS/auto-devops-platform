@@ -18,7 +18,8 @@ def read_root():
 def trigger_crash():
     """Simulates a critical failure (Process Exit)"""
     print("CRITICAL: Segment Fault detected. Shutting down...", file=sys.stderr)
-    sys.exit(1)
+    # sys.exit(1) too polite, doesnt actually simulate crash well
+    os._exit(1) # this will
 
 @app.get("/chaos/disconnect")
 def trigger_disconnect():

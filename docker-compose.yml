@@ -22,7 +22,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     env_file:
-      - ./services/agent-sentinel/.env
+      - .env
     environment:
       - TARGET_CONTAINER=production-victim
     networks:
